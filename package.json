@@ -11,7 +11,8 @@
     "test:ui": "vitest --ui",
     "coverage": "vitest run --coverage",
     "format": "prettier . --write",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "check-types": "tsc"
   },
   "devDependencies": {
     "@eslint/js": "^9.7.0",
@@ -20,6 +21,7 @@
     "eslint": "^9.7.0",
     "globals": "^15.8.0",
     "prettier": "^3.3.3",
+    "typescript": "^5.5.3",
     "vite": "^5.0.0",
     "vitest": "^2.0.3"
   },

@@ -6,6 +6,7 @@ export default [
     languageOptions: {
       globals: globals.browser,
     },
+    ignores: ['dist/'],
     rules: {
       // 'space-before-function-paren': ['error', 'always'],
       'space-before-function-paren': 'off',
