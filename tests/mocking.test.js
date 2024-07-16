@@ -18,12 +18,13 @@ vi.mock('../src/libs/email', async (importOriginal) => {
 ///////////////////////////////////
 
 import { vi, it, expect, describe } from 'vitest';
-import { getPriceInCurrency, getShippingInfo, renderPage, signUp, submitOrder } from '../src/mocking';
+import { getPriceInCurrency, getShippingInfo, login, renderPage, signUp, submitOrder } from '../src/mocking';
 import { getExchangeRate } from '../src/libs/currency';
 import { getShippingQuote } from '../src/libs/shipping';
 import { trackPageView } from '../src/libs/analytics';
 import { charge } from '../src/libs/payment';
 import { sendEmail } from '../src/libs/email';
+import security from '../src/libs/security';
 
 
 // describe('test suit', () => {
@@ -167,31 +168,44 @@ import { sendEmail } from '../src/libs/email';
 
 
 // 8 - Partial Mocking
-describe('signUp', () => {
+// describe('signUp', () => {
 
-    const email = 'anne@gmail.com';
+//     const email = 'anne@gmail.com';
 
-    it('should return false if email is not valid', async () => {
-        const result = await signUp('a');
+//     it('should return false if email is not valid', async () => {
+//         const result = await signUp('a');
 
-        expect(result).toBe(false);
-    });
+//         expect(result).toBe(false);
+//     });
 
-    it('should return true if email is valid', async () => {
-        const result = await signUp(email);
+//     it('should return true if email is valid', async () => {
+//         const result = await signUp(email);
 
-        expect(result).toBe(true);
-    });
+//         expect(result).toBe(true);
+//     });
 
-    // testing interaction with sendEmail()
-    it('should send the welcome email if email is valid', async () => {
-        const result = await signUp(email);
+//     // testing interaction with sendEmail()
+//     it('should send the welcome email if email is valid', async () => {
+//         const result = await signUp(email);
 
-        expect(sendEmail).toHaveBeenCalled();
+//         expect(sendEmail).toHaveBeenCalled();
 
-        // "calls" property: tracking all the calls to this function (calls[0]: the first call)
-        const args = vi.mocked(sendEmail).mock.calls[0]
-        expect(args[0]).toBe(email);
-        expect(args[1]).toMatch(/welcome/i);
-    });
+//         // "calls" property: tracking all the calls to this function (calls[0]: the first call)
+//         const args = vi.mocked(sendEmail).mock.calls[0]
+//         expect(args[0]).toBe(email);
+//         expect(args[1]).toMatch(/welcome/i);
+//     });
+// })
+
+// 9 - Spying on Functions
+describe('login', () => {
+    it('should email the one-time login code', async () => {
+        const email = 'name@domain.com';
+        const spy = vi.spyOn(security, 'generateCode');
+
+        await login(email);
+
+        const securityCode = spy.mock.results[0].value.toString();
+        expect(sendEmail).toHaveBeenCalledWith(email, securityCode);
+    })
 })
