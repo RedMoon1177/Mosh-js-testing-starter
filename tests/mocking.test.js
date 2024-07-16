@@ -1,13 +1,13 @@
 ////// MOCK MODULES ///////////////
-vi.mock("../src/libs/currency"); // this line will be run first (before import) to
+vi.mock('../src/libs/currency'); // this line will be run first (before import) to
 // create mock functions with default behaviors (do nothing) for all functions in module currency => and then import the mocked functions
 // In JS, this is called Hoisting! (meaning a line of code is pushed to the top of the file)
-vi.mock("../src/libs/shipping");
-vi.mock("../src/libs/analytics");
-vi.mock("../src/libs/payment");
+vi.mock('../src/libs/shipping');
+vi.mock('../src/libs/analytics');
+vi.mock('../src/libs/payment');
 
 // PARTIAL MOCKING
-vi.mock("../src/libs/email", async (importOriginal) => {
+vi.mock('../src/libs/email', async (importOriginal) => {
   const originalModule = await importOriginal();
   return {
     ...originalModule,
@@ -16,7 +16,7 @@ vi.mock("../src/libs/email", async (importOriginal) => {
 });
 ///////////////////////////////////
 
-import { vi, it, expect, describe, beforeEach } from "vitest";
+import { vi, it, expect, describe, beforeEach } from 'vitest';
 import {
   getDiscount,
   getPriceInCurrency,
@@ -26,13 +26,13 @@ import {
   renderPage,
   signUp,
   submitOrder,
-} from "../src/mocking";
-import { getExchangeRate } from "../src/libs/currency";
-import { getShippingQuote } from "../src/libs/shipping";
-import { trackPageView } from "../src/libs/analytics";
-import { charge } from "../src/libs/payment";
-import { sendEmail } from "../src/libs/email";
-import security from "../src/libs/security";
+} from '../src/mocking';
+import { getExchangeRate } from '../src/libs/currency';
+import { getShippingQuote } from '../src/libs/shipping';
+import { trackPageView } from '../src/libs/analytics';
+import { charge } from '../src/libs/payment';
+import { sendEmail } from '../src/libs/email';
+import security from '../src/libs/security';
 
 // describe('test suit', () => {
 //     it('test case', () => {
@@ -245,20 +245,20 @@ import security from "../src/libs/security";
 // })
 
 // 13 - Exercise: Testing getDiscount
-describe("getDiscount", () => {
-  it("should return 20% discount on Christmas day", () => {
-    vi.setSystemTime("2024-12-25 00:00");
+describe('getDiscount', () => {
+  it('should return 20% discount on Christmas day', () => {
+    vi.setSystemTime('2024-12-25 00:00');
     expect(getDiscount()).toBe(0.2);
 
-    vi.setSystemTime("2024-12-25 23:59");
+    vi.setSystemTime('2024-12-25 23:59');
     expect(getDiscount()).toBe(0.2);
   });
 
-  it("should return 0% discount on any other day", () => {
-    vi.setSystemTime("2024-12-24 00:00");
+  it('should return 0% discount on any other day', () => {
+    vi.setSystemTime('2024-12-24 00:00');
     expect(getDiscount()).toBe(0);
 
-    vi.setSystemTime("2024-12-26 23:59");
+    vi.setSystemTime('2024-12-26 23:59');
     expect(getDiscount()).toBe(0);
   });
 });
