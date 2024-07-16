@@ -1,0 +1,19 @@
+import { it, expect, describe } from "vitest";
+
+
+describe('test suite', () => {
+    it('test case', () => {
+        const result = { name: 'Mosh', id: 1 };
+        // expect(result).toEqual({ name: 'Mosh' });
+        expect(result).toMatchObject({name: 'Mosh'});
+        expect(result).toHaveProperty('name');
+
+        // const result = [3, 1, 2];
+
+        // loose assertion
+        // expect(result).toBeDefined();
+
+        // tight assertion
+        // expect(result).toEqual(expect.arrayContaining([1, 2, 3]));
+    })
+})
