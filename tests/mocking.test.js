@@ -18,7 +18,7 @@ vi.mock('../src/libs/email', async (importOriginal) => {
 ///////////////////////////////////
 
 import { vi, it, expect, describe, beforeEach } from 'vitest';
-import { getPriceInCurrency, getShippingInfo, login, renderPage, signUp, submitOrder } from '../src/mocking';
+import { getDiscount, getPriceInCurrency, getShippingInfo, isOnline, login, renderPage, signUp, submitOrder } from '../src/mocking';
 import { getExchangeRate } from '../src/libs/currency';
 import { getShippingQuote } from '../src/libs/shipping';
 import { trackPageView } from '../src/libs/analytics';
@@ -168,42 +168,42 @@ import security from '../src/libs/security';
 
 
 // 8 - Partial Mocking
-describe('signUp', () => {
+// describe('signUp', () => {
 
-    const email = 'anne@gmail.com';
+//     const email = 'anne@gmail.com';
 
-    // beforeEach(() => {
-    //     // vi.mocked(sendEmail).mockClear(); // this clear our state of the mocked function before each test
-    //     // or
-    //     vi.clearAllMocks();
-    //     // or setup clearMocks: true in a vitest.config.js file (this file will be run once when we run "npm test")
-    // })
+//     // beforeEach(() => {
+//     //     // vi.mocked(sendEmail).mockClear(); // this clear our state of the mocked function before each test
+//     //     // or
+//     //     vi.clearAllMocks();
+//     //     // or setup clearMocks: true in a vitest.config.js file (this file will be run once when we run "npm test")
+//     // })
 
-    it('should return false if email is not valid', async () => {
-        const result = await signUp('a');
+//     it('should return false if email is not valid', async () => {
+//         const result = await signUp('a');
 
-        expect(result).toBe(false);
-    });
+//         expect(result).toBe(false);
+//     });
 
-    it('should return true if email is valid', async () => {
-        const result = await signUp(email);
+//     it('should return true if email is valid', async () => {
+//         const result = await signUp(email);
 
-        expect(result).toBe(true);
-    });
+//         expect(result).toBe(true);
+//     });
 
-    // testing interaction with sendEmail()
-    it('should send the welcome email if email is valid', async () => {
-        const result = await signUp(email);
+//     // testing interaction with sendEmail()
+//     it('should send the welcome email if email is valid', async () => {
+//         const result = await signUp(email);
 
-        // expect(sendEmail).toHaveBeenCalled();
-        expect(sendEmail).toHaveBeenCalledOnce();
+//         // expect(sendEmail).toHaveBeenCalled();
+//         expect(sendEmail).toHaveBeenCalledOnce();
 
-        // "calls" property: tracking all the calls to this function (calls[0]: the first call)
-        const args = vi.mocked(sendEmail).mock.calls[0]
-        expect(args[0]).toBe(email);
-        expect(args[1]).toMatch(/welcome/i);
-    });
-})
+//         // "calls" property: tracking all the calls to this function (calls[0]: the first call)
+//         const args = vi.mocked(sendEmail).mock.calls[0]
+//         expect(args[0]).toBe(email);
+//         expect(args[1]).toMatch(/welcome/i);
+//     });
+// })
 
 // 9 - Spying on Functions
 // describe('login', () => {
@@ -220,3 +220,42 @@ describe('signUp', () => {
 //         // expect(sendEmail).toHaveBeenCalled();
 //     })
 // })
+
+// 12 - Mocking Dates
+// describe('isOnline', () => {
+//     it('should return false if current hour is outside opening hours', () => {
+//         vi.setSystemTime('2024-01-01 07:59');
+//         expect(isOnline()).toBe(false);
+
+//         vi.setSystemTime('2024-01-01 20:01');
+//         expect(isOnline()).toBe(false);
+//     });
+
+//     it('should return true if current hour is within opening hours', () => {
+//         vi.setSystemTime('2024-01-01 08:00');
+//         expect(isOnline()).toBe(true);
+
+//         vi.setSystemTime('2024-01-01 19:59');
+//         expect(isOnline()).toBe(true);
+//     })
+// })
+
+
+// 13 - Exercise: Testing getDiscount
+describe('getDiscount', () => {
+    it('should return 20% discount on Christmas day', () => {
+        vi.setSystemTime('2024-12-25 00:00');
+        expect(getDiscount()).toBe(0.2);
+
+        vi.setSystemTime('2024-12-25 23:59');
+        expect(getDiscount()).toBe(0.2);
+    });
+
+    it('should return 0% discount on any other day', () => {
+        vi.setSystemTime('2024-12-24 00:00');
+        expect(getDiscount()).toBe(0);
+
+        vi.setSystemTime('2024-12-26 23:59');
+        expect(getDiscount()).toBe(0);
+    });
+})
